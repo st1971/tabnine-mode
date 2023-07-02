@@ -240,6 +240,7 @@ Tabnine will not be triggered if any predicate returns t."
 
 (defun tabnine--set-overlay-text (ov)
   "Set overlay OV with COMPLETION."
+  ;; TODO: Need to handle suffix as the display is all messed up
 
   (let ((tn-current-results (cdr (assoc 'results tabnine--response))))
     (when (> (length tn-current-results) 0)
@@ -266,9 +267,11 @@ Tabnine will not be triggered if any predicate returns t."
             (move-overlay ov (- (point) old-prefix-lenght) (+ (line-end-position) 1) ))
 
           (overlay-put ov 'display p-completion-prefix)
-          (if (eolp)
-              (overlay-put ov 'after-string (concat p-completion-suffix "\n"))
-            (overlay-put ov 'after-string p-completion-suffix))
+          (overlay-put ov 'after-string (concat p-completion-suffix "\n"))
+
+          ;; (if (eolp)
+          ;;     (overlay-put ov 'after-string (concat p-completion-suffix "\n"))
+          ;;   (overlay-put ov 'after-string p-completion-suffix))
 
           (overlay-put ov 'completion-idx  tabnine--response-idx)
           (overlay-put ov 'start (- (point) old-prefix-lenght)))
