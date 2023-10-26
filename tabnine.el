@@ -54,6 +54,11 @@
   :group 'tabnine
   :type 'float)
 
+(defcustom tabnine-idle-timeout 0.50
+  "Number of seconds to wait for TabNine to respond."
+  :group 'tabnine
+  :type 'float)
+
 (defcustom tabnine-context-radius 2500
   "The number of chars before/after point to send for completion.
 Note that setting this too small will cause TabNine
@@ -637,7 +642,7 @@ PROCESS is the process under watch, OUTPUT is the output received."
       (cancel-timer tabnine--post-command-timer))
     (when (tabnine--buffer-changed)
       (setq tabnine--post-command-timer
-            (run-with-idle-timer 0.50
+            (run-with-idle-timer tabnine-idle-timeout
                                  nil
                                  #'tabnine--post-command-debounce
                                  (current-buffer))))
